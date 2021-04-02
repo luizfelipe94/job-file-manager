@@ -17,7 +17,7 @@ export class Folder extends BaseEntity {
     @ManyToOne(type => User, user => user.folders)
     user: User;
 
-    @OneToMany(type => File, file => file.folder)
+    @OneToMany(type => File, file => file.folder, { eager: true, cascade: true })
     files: File[];
 
     @CreateDateColumn()

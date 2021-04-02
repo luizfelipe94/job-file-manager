@@ -17,13 +17,13 @@ export class File extends BaseEntity {
     @Column({ type: "int", default: 0 })
     qtyLines: number;
 
-    @Column({ type: "varchar" })
-    s3path: string;
+    @Column({ type: "varchar", nullable: true })
+    path: string;
 
     @Column({ type: "bool", default: false })
     sync: boolean;
 
-    @ManyToOne(type => Folder, folder => folder.files)
+    @ManyToOne(type => Folder, folder => folder.files, { onDelete: "CASCADE" })
     folder: Folder;
 
     @OneToMany(type => Job, job => job.file)

@@ -17,9 +17,9 @@ export class CreateUserDTO {
     @Length(8, 30, { message: 'password must be 8 to 20 characters long' })
     password: string;
 
-    @ApiProperty()
-    @IsUUID('all', { message: 'invalid tenantUuid' })
-    @IsNotEmpty({ message: 'tenantUuid cannot be empty' })
-    readonly tenantUuid: string;
+    // @ApiProperty()
+    // @IsUUID('all', { message: 'invalid tenantUuid' })
+    // @IsNotEmpty({ message: 'tenantUuid cannot be empty' })
+    // readonly tenantUuid: string;
 
 }
