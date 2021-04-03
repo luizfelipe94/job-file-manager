@@ -1,4 +1,4 @@
-import { Job } from "src/job/job.entity";
+import { Job } from "../job/job.entity";
 import { BaseEntity, Column, CreateDateColumn, DeleteDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn, VersionColumn } from "typeorm";
 import { JobCheckpointStatus } from "./job-checkpoint-status.enum";
 

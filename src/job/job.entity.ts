@@ -1,9 +1,10 @@
-import { File } from "src/file/file.entity";
-import { JobCheckpoint } from "src/job-checkpoint/job-checkpoint.entity";
-import { JobResult } from "src/job-result/job-result.entity";
-import { JobStatusLog } from "src/job-status-log/job-status-log.entity";
+import { File } from "../folder/file.entity";
+import { JobCheckpoint } from "./job-checkpoint.entity";
+import { JobResult } from "./job-result.entity";
+import { JobStatusLog } from "./job-status-log.entity";
 import { BaseEntity, Column, CreateDateColumn, DeleteDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn, VersionColumn } from "typeorm";
 import { JobStatus } from "./job-status.enum";
+import { User } from "../user/user.entity";
 
 @Entity("job")
 export class Job extends BaseEntity {
@@ -11,10 +12,10 @@ export class Job extends BaseEntity {
     @PrimaryGeneratedColumn('uuid')
     uuid: string;
 
-    @Column({ type: "date" })
+    @Column({ type: "date", nullable: true })
     startDate: Date;
 
-    @Column({ type: "date" })
+    @Column({ type: "date", nullable: true })
     endDate: Date;
 
     @Column({ type: "enum", enum: JobStatus })
@@ -25,6 +26,9 @@ export class Job extends BaseEntity {
 
     @ManyToOne(type => File, file => file.jobs)
     file: File;
+
+    @ManyToOne(type => User, user => user.jobs)
+    user: User;
 
     @OneToMany(type => JobStatusLog, jobStatusLog => jobStatusLog.job)
     jobStatusLogs: JobStatusLog[];

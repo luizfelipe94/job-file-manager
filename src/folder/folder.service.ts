@@ -5,9 +5,10 @@ import { JwtPayload } from '../auth/interface/jwt-payload.interface';
 import { UserRepository } from '../user/user.repository';
 import { CreateFolderDTO } from './dto/create-folder.dto';
 import { Folder } from './folder.entity';
-import { File } from '../file/file.entity';
+import { File } from './file.entity';
 import { FolderRepository } from './folder.repository';
 import { CreateFileDTO } from './dto/create-file.dto';
+import { SyncFileDTO } from './dto/sync-file.dto';
 
 @Injectable()
 export class FolderService {
@@ -79,6 +80,38 @@ export class FolderService {
         return await this.folderRepository.remove(folder);
     }
 
+    public async findFile(user: JwtPayload, folderUuid: string, fileUuid: string): Promise<File> {
+
+        const folder = await this.folderRepository.findOne({
+            where: {
+                uuid: folderUuid,
+                user: user.uuid
+            }
+        });
+
+        if(!folder) throw new NotFoundException(`Not found folder for uuid ${folderUuid}`);
+
+        return await this.fileRepository.findOne({
+            where: {
+                folder,
+                uuid: fileUuid
+            }
+        });
+
+    }
+
+    public async listFiles(user: JwtPayload, folderUuid: string): Promise<Folder> {
+
+        return await this.folderRepository.findOne({
+            where: {
+                user: user.uuid,
+                uuid: folderUuid
+            },
+            relations: ["files"]
+        });
+
+    }
+
     public async createFile(user: JwtPayload, folderUuid: string, createFileDTO: CreateFileDTO): Promise<File> {
 
         const folder = await this.folderRepository.findOne({ where: { uuid: folderUuid } });
@@ -94,6 +127,28 @@ export class FolderService {
         file.folder = folder;
 
         return await this.fileRepository.save(file);
+
+    }
+    
+    public async syncFile(user: JwtPayload, folderUuid: string, fileUuid: string, syncFileDTO: SyncFileDTO): Promise<File> {
+
+        const folder = await this.folderRepository.findOne({ where: { user: user.uuid, uuid: folderUuid } });
+        
+        if(!folder) throw new NotFoundException(`Not found folder for uuid ${folderUuid}`);
+
+        const fileToUpdate = await this.fileRepository.findOne({ 
+            where: {
+                uuid: fileUuid,
+                folder: folderUuid
+            }
+        });
+
+        if(!fileToUpdate) throw new NotFoundException(`Not found file for uuid ${fileUuid}`);
+
+        fileToUpdate.path = syncFileDTO.path;
+        fileToUpdate.sync = syncFileDTO.sync;
+
+        return await this.fileRepository.save(fileToUpdate);
 
     }
 

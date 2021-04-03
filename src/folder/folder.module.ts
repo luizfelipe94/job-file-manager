@@ -4,11 +4,12 @@ import { FolderController } from './folder.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { FolderRepository } from './folder.repository';
 import { UserRepository } from '../user/user.repository';
-import { File } from '../file/file.entity';
+import { File } from './file.entity';
 
 @Module({
   imports: [TypeOrmModule.forFeature([FolderRepository, UserRepository, File])],
   providers: [FolderService],
-  controllers: [FolderController]
+  controllers: [FolderController],
+  exports: [FolderService]
 })
 export class FolderModule {}

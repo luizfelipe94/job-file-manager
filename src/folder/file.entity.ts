@@ -1,5 +1,5 @@
-import { Folder } from "src/folder/folder.entity";
-import { Job } from "src/job/job.entity";
+import { Folder } from "./folder.entity";
+import { Job } from "../job/job.entity";
 import { BaseEntity, Column, CreateDateColumn, DeleteDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn, VersionColumn } from "typeorm";
 
 @Entity("file")

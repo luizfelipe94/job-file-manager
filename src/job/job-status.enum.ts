@@ -1,6 +1,7 @@
 export enum JobStatus {
-    WAITING  = "waiting",
+    CREATED  = "created",
     SUCCESS  = "success",
     FAILED   = "failed",
-    CANCELED = "canceled"
+    CANCELED = "canceled",
+    INITIALIZAED = "initialized"
 }

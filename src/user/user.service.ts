@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException, UnprocessableEntityException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { JwtPayload } from 'src/auth/interface/jwt-payload.interface';
+import { JwtPayload } from '../auth/interface/jwt-payload.interface';
 import { TenantRepository } from '../tenant/tenant.repository';
 import { CreateUserDTO } from './dto';
 import { User } from './user.entity';

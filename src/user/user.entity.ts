@@ -1,8 +1,9 @@
 import { BaseEntity, BeforeInsert, Column, CreateDateColumn, DeleteDateColumn, Entity, JoinTable, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn, VersionColumn } from "typeorm";
 import * as bcrypt from 'bcrypt';
-import { Tenant } from "src/tenant/tenant.entity";
-import { Role } from "src/role/role.entity";
-import { Folder } from "src/folder/folder.entity";
+import { Tenant } from "../tenant/tenant.entity";
+import { Role } from "../role/role.entity";
+import { Folder } from "../folder/folder.entity";
+import { Job } from "../job/job.entity";
 
 @Entity("user")
 export class User extends BaseEntity {
@@ -28,6 +29,9 @@ export class User extends BaseEntity {
 
     @OneToMany(type => Folder, folder => folder.user)
     folders: Folder[];
+
+    @OneToMany(type => Job, job => job.user)
+    jobs: Job[];
 
     @CreateDateColumn()
     createdAt: Date;

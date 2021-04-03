@@ -1,5 +1,5 @@
-import { File } from "src/file/file.entity";
-import { User } from "src/user/user.entity";
+import { File } from "../folder/file.entity";
+import { User } from "../user/user.entity";
 import { BaseEntity, Column, CreateDateColumn, DeleteDateColumn, Entity, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn, VersionColumn } from "typeorm";
 
 @Entity("folder")
@@ -17,7 +17,7 @@ export class Folder extends BaseEntity {
     @ManyToOne(type => User, user => user.folders)
     user: User;
 
-    @OneToMany(type => File, file => file.folder, { eager: true, cascade: true })
+    @OneToMany(type => File, file => file.folder, { eager: false, cascade: true })
     files: File[];
 
     @CreateDateColumn()
