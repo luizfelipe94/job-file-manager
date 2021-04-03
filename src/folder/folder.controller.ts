@@ -12,7 +12,7 @@ import { CreateFolderDTO } from './dto/create-folder.dto';
 import { CreateFileDTO } from './dto/create-file.dto';
 import { SyncFileDTO } from './dto/sync-file.dto';
 
-@ApiTags('folder', 'file')
+@ApiTags('folder')
 @Controller('folder')
 @UseGuards(JwtAuthGuard, RolesGuard)
 export class FolderController {

@@ -9,9 +9,10 @@ import { FolderRepository } from '../folder/folder.repository';
 import { UserModule } from '../user/user.module';
 import { JobStatusLog } from './job-status-log.entity';
 import { JobCheckpoint } from './job-checkpoint.entity';
+import { JobResult } from './job-result.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([JobRepository, FolderRepository, File, JobStatusLog, JobCheckpoint]), FolderModule, UserModule],
+  imports: [TypeOrmModule.forFeature([JobRepository, FolderRepository, File, JobStatusLog, JobCheckpoint, JobResult]), FolderModule, UserModule],
   providers: [JobService],
   controllers: [JobController]
 })

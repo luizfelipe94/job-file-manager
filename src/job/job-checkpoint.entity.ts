@@ -8,8 +8,8 @@ export class JobCheckpoint extends BaseEntity {
     @PrimaryGeneratedColumn('uuid')
     uuid: string;
 
-    @Column({ type: "int", default: 0, nullable: false })
-    batchId: number;
+    @Column({ type: "date", nullable: false })
+    date: Date;
     
     @Column({ type: "varchar", length: 2000, nullable: false })
     message: string;

@@ -20,6 +20,9 @@ export class File extends BaseEntity {
     @Column({ type: "varchar", nullable: true })
     path: string;
 
+    @Column({ type: "varchar", length: 256 })
+    encoding: string;
+
     @Column({ type: "bool", default: false })
     sync: boolean;
 

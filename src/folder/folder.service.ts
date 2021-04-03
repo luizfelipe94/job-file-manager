@@ -124,6 +124,7 @@ export class FolderService {
         file.name = createFileDTO.name;
         file.size = createFileDTO.size;
         file.qtyLines = createFileDTO.qtyLines;
+        file.encoding = createFileDTO.encoding;
         file.folder = folder;
 
         return await this.fileRepository.save(file);

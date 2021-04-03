@@ -16,10 +16,8 @@ export class CreateFileDTO {
     @IsNotEmpty({ message: 'qtyLines cannot be empty' })
     qtyLines: number;
 
-    // @ApiProperty()
-    // s3path: string;
-
-    // @ApiProperty()
-    // sync: boolean;
+    @ApiProperty()
+    @IsNotEmpty({ message: 'encoding cannot be empty' })
+    encoding: string;
 
 }

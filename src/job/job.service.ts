@@ -10,9 +10,10 @@ import { Job } from './job.entity';
 import { File } from '../folder/file.entity';
 import { JobRepository } from './job.repository';
 import { FolderService } from '../folder/folder.service';
-import { UserService } from 'src/user/user.service';
-import { JobStatus } from './job-status.enum';
+import { UserService } from '../user/user.service';
 import { CreateJobCheckpointDTO } from './dto/create-job-checkpoint.dto';
+import { JobStatus } from './job-status.enum';
+import { CreateJobResultDTO } from './dto/create-job-result.dto';
 
 @Injectable()
 export class JobService {
@@ -21,6 +22,7 @@ export class JobService {
         @InjectRepository(JobRepository) private readonly jobRepository: JobRepository,
         @InjectRepository(JobStatusLog) private readonly jobStatusLogRepository: Repository<JobStatusLog>,
         @InjectRepository(JobCheckpoint) private readonly jobCheckpointRepository: Repository<JobCheckpoint>,
+        @InjectRepository(JobResult) private readonly jobResultRepository: Repository<JobResult>,
         @InjectRepository(File) private readonly fileRepository: Repository<File>,
         private readonly folderService: FolderService,
         private readonly userService: UserService
@@ -102,7 +104,7 @@ export class JobService {
         return await this.jobRepository.findOne(jobResult.uuid);
     }
 
-    public async finishJob(user: JwtPayload, jobUuid: string, jobstatus?: JobStatus): Promise<Job> {
+    public async finishJob(user: JwtPayload, jobUuid: string, jobFinishStatus: string): Promise<Job> {
 
         const job = await this.getJob(user, jobUuid);
 
@@ -110,7 +112,7 @@ export class JobService {
 
         if(job.status != JobStatus.INITIALIZAED) throw new UnprocessableEntityException(`Job ${job.uuid} cant be finished. status ${job.status}`);
 
-        job.status = JobStatus.SUCCESS;
+        job.status = JobStatus[jobFinishStatus];
         job.endDate = new Date();
 
         const jobResult = await this.jobRepository.save(job)
@@ -127,26 +129,11 @@ export class JobService {
         return await this.jobRepository.findOne(jobResult.uuid);
     }
 
-    // JOBSTATUSLOG
-
-    // public async listJobStatusLogs(user: JwtPayload): Promise<JobStatusLog[]>{
-    //     throw new NotImplementedException("Not implemented yet");
-    // }
-
-    // public async getJobStatusLog(user: JwtPayload): Promise<JobStatusLog>{
-    //     throw new NotImplementedException("Not implemented yet");
-    // }
- 
-    // public async createJobStatusLog(user: JwtPayload): Promise<JobStatusLog> {
-    //     throw new NotImplementedException("Not implemented yet");
-    // }
-
     // JOBCHECKPOINT
 
-    public async listJobCheckpoints(user: JwtPayload, jobUuid: string): Promise<JobCheckpoint[]> {
+    public async listJobCheckpoints(user: JwtPayload, jobUuid: string): Promise<Job> {
 
-        const job = await this.getJob(user, jobUuid, ["jobCheckpoints"]);
-        return job.jobCheckpoints;
+        return await this.getJob(user, jobUuid, ["jobCheckpoints"]);
 
     }
 
@@ -156,7 +143,7 @@ export class JobService {
 
         const jobCheckpoint = new JobCheckpoint();
         jobCheckpoint.status = createJobcheckpointDTO.status;
-        jobCheckpoint.batchId = createJobcheckpointDTO.batchId;
+        jobCheckpoint.date = createJobcheckpointDTO.date;
         jobCheckpoint.message = createJobcheckpointDTO.message;
         jobCheckpoint.job = job;
 
@@ -166,16 +153,22 @@ export class JobService {
 
     // JOB RESULT
 
-    public async listJobResults(user: JwtPayload): Promise<JobResult[]> {
-        throw new NotImplementedException("Not implemented yet");
+    public async listJobResults(user: JwtPayload, jobUuid: string): Promise<Job> {
+
+        return await this.getJob(user, jobUuid, ["jobResults"]);
+
     }
 
-    public async getJobResult(user: JwtPayload): Promise<JobResult> {
-        throw new NotImplementedException("Not implemented yet");
-    }
+    public async createJobResult(user: JwtPayload, jobUuid: string, createJobResultDTO: CreateJobResultDTO): Promise<JobResult> {
 
-    public async createJobResult(user: JwtPayload): Promise<JobResult> {
-        throw new NotImplementedException("Not implemented yet");
+        const job = await this.getJob(user, jobUuid);
+
+        const jobResult = new JobResult();
+        jobResult.job = job;
+        jobResult.result = createJobResultDTO.result;
+
+        return await this.jobResultRepository.save(jobResult);
+
     }
 
 
